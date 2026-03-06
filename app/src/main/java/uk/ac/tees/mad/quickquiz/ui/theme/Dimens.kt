@@ -16,8 +16,8 @@ object Dimens {
 
     // Component-specific
     val CardPadding = 16.dp
-    val ButtonHeight = 56.dp
-    val InputHeight = 52.dp
+    val ButtonHeight = 48.dp
+    val InputHeight = 64.dp
 
     // Icon sizes
     val IconS = 16.dp
