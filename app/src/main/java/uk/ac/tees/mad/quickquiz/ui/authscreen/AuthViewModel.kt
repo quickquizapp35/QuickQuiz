@@ -94,7 +94,7 @@ class AuthViewModel(application : Application )
                      it.copy(
                          isLoading = false,
                          error = mapFirebaseAuthException(Exception(exception))
-                      )
+                       )
                     }
                 }
             )

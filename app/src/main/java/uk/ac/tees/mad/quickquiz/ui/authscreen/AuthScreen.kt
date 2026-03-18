@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,13 +31,19 @@ import uk.ac.tees.mad.quickquiz.utils.toMessage
 
 @Composable
 fun AuthScreen(
-    authViewModel: AuthViewModel = viewModel()
+    authViewModel: AuthViewModel = viewModel(),
+    onNavigateToHome: () -> Unit
 ){
     val uiState by authViewModel.authUiState.collectAsState()
 
+    LaunchedEffect(uiState.isAuthenticated) {
+        if(uiState.isAuthenticated){
+            onNavigateToHome()
+        }
+    }
+
     AuthScreenContent(
         onSettingClick = {},
-        onNavigateToHome = {},
         uiState = uiState,
         onEmailChange = authViewModel::onEmailChange,
         onPasswordChange = authViewModel::onPasswordChange,
@@ -50,7 +57,6 @@ fun AuthScreen(
 @Composable
 private fun AuthScreenContent(
     onSettingClick: () -> Unit,
-    onNavigateToHome :()-> Unit,
     uiState: AuthUiState,
     onEmailChange:(String)-> Unit,
     onPasswordChange:(String)-> Unit,
@@ -58,6 +64,7 @@ private fun AuthScreenContent(
     onAuthModeChange:(AuthMode)-> Unit,
     onPrimaryActionClick:(AuthMode)-> Unit,
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -122,5 +129,5 @@ private fun AuthScreenContent(
 @Composable
 @Preview(showBackground = true)
 fun AuthScreenPreview(){
-    AuthScreen()
+    AuthScreen(onNavigateToHome = {})
 }

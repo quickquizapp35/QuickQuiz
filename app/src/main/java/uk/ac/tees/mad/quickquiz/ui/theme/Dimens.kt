@@ -6,6 +6,9 @@ object Dimens {
 
     // Screen padding
     val ScreenPadding = 20.dp
+    // Top bar
+    val TopBarHeight = 48.dp
+
 
     // Vertical spacing
     val SpaceXS = 4.dp
@@ -16,7 +19,7 @@ object Dimens {
 
     // Component-specific
     val CardPadding = 16.dp
-    val ButtonHeight = 48.dp
+    val ButtonHeight = 40.dp
     val InputHeight = 64.dp
 
     // Icon sizes
