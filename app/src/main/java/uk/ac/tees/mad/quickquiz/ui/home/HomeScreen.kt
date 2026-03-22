@@ -25,11 +25,13 @@ import uk.ac.tees.mad.quickquiz.ui.home.components.HomeHeader
 import uk.ac.tees.mad.quickquiz.ui.home.components.HomeTopBar
 import uk.ac.tees.mad.quickquiz.ui.home.components.SelectedCategoryFooter
 import uk.ac.tees.mad.quickquiz.ui.theme.Dimens
+import uk.ac.tees.mad.quickquiz.utils.QuizDifficulty
 
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = viewModel(),
-    onSettingClick:()-> Unit
+    onSettingClick:()-> Unit,
+    onNavigateToQuiz:(Int , QuizDifficulty)-> Unit
 ){
     val uiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
 
@@ -100,7 +102,7 @@ fun HomeScreen(
             SelectedCategoryFooter(
                 category = uiState.selectedCategory,
                 onStartClick = { selected ->
-                    //navigate to quiz screen with id of selected category
+                    onNavigateToQuiz(selected.id, uiState.selectedDifficulty)
                 },
                 selected = uiState.selectedDifficulty,
                 onDifficultySelect = {
@@ -114,5 +116,8 @@ fun HomeScreen(
 @Composable
 @Preview(showBackground = true)
 fun HomeScreenPreview(){
-    HomeScreen(onSettingClick = {})
+    HomeScreen(onSettingClick = {},
+        onNavigateToQuiz = {
+            id, difficulty ->
+        })
 }

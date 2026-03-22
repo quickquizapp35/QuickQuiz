@@ -9,6 +9,13 @@ object Dimens {
     // Top bar
     val TopBarHeight = 48.dp
 
+    // Dimens.kt
+    val OptionBadgeSize = 36.dp
+
+    // Dimens.kt
+    val BottomBarHeight = 140.dp
+
+
 
     // Vertical spacing
     val SpaceXS = 4.dp
@@ -18,7 +25,7 @@ object Dimens {
     val SpaceXL = 32.dp
 
     // Component-specific
-    val CardPadding = 16.dp
+    val CardPadding = 12.dp
     val ButtonHeight = 40.dp
     val InputHeight = 64.dp
 
