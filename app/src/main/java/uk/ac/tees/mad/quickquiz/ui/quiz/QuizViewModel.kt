@@ -42,11 +42,44 @@ class QuizViewModel(application: Application)
                          uiState.copy(
                              isLoading = false,
                              error = null,
-                             questionList = success.map { it.toUi() }
+                             questions = success.map { it.toUi() }
                          )
                      }
                  }
              )
         }
     }
+
+
+    fun onOptionSelected(optionId: String) {
+        _quizUiState.update {
+            it.copy(selectedOptionId = optionId)
+        }
+    }
+
+
+    fun onConfirmAnswer() {
+        val state = _quizUiState.value
+        val question = state.currentQuestion ?: return
+
+        val selected = question.options
+            .firstOrNull { it.id == state.selectedOptionId }
+            ?: return
+
+        val newScore =
+            if (selected.isCorrect) state.score + 1
+            else state.score
+
+        val isLast = state.currentIndex == state.questions.lastIndex
+
+        _quizUiState.update {
+            it.copy(
+                score = newScore,
+                currentIndex = if (isLast) it.currentIndex else it.currentIndex + 1,
+                selectedOptionId = null,
+                isFinished = isLast
+            )
+        }
+    }
 }
+
