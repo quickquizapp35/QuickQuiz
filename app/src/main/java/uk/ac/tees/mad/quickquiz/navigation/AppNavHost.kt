@@ -9,6 +9,8 @@ import androidx.navigation.navArgument
 import uk.ac.tees.mad.quickquiz.ui.authscreen.AuthScreen
 import uk.ac.tees.mad.quickquiz.ui.home.HomeScreen
 import uk.ac.tees.mad.quickquiz.ui.quiz.QuizScreen
+import uk.ac.tees.mad.quickquiz.ui.result.ResultScreen
+import uk.ac.tees.mad.quickquiz.ui.result.ResultUiState
 
 @Composable
 fun AppNavHost(
@@ -46,6 +48,9 @@ fun AppNavHost(
                 difficulty = difficulty,
                 onNavigateToHome = {
                     navController.popBackStack()
+                },
+                onNavigateToResult = {
+                    navController.navigate(NavRoutes.Result.route)
                 }
             )
         }
@@ -65,7 +70,16 @@ fun AppNavHost(
         }
 
         composable(NavRoutes.Result.route) {
-
+            ResultScreen(
+                uiState = ResultUiState(
+                    categoryName = "Mathematics",
+                    totalQuestions = 10,
+                    correctAnswers = 7
+                ),
+                onRetry = {},
+                onBackToHome = {},
+                onBack = {}
+            )
         }
     }
 }
