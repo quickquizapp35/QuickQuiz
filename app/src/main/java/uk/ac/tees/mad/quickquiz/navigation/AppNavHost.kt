@@ -11,6 +11,7 @@ import uk.ac.tees.mad.quickquiz.ui.home.HomeScreen
 import uk.ac.tees.mad.quickquiz.ui.quiz.QuizScreen
 import uk.ac.tees.mad.quickquiz.ui.result.ResultScreen
 import uk.ac.tees.mad.quickquiz.ui.result.ResultUiState
+import uk.ac.tees.mad.quickquiz.ui.setting.SettingsScreen
 
 @Composable
 fun AppNavHost(
@@ -28,7 +29,7 @@ fun AppNavHost(
                     navController.navigate(NavRoutes.Quiz.quizRoute(id, difficulty))
                 },
                 onSettingClick = {
-
+                    navController.navigate(NavRoutes.Setting.route)
                 }
             )
         }
@@ -66,7 +67,11 @@ fun AppNavHost(
         }
 
         composable(NavRoutes.Setting.route) {
-
+            SettingsScreen(
+                onNavBack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable(NavRoutes.Result.route) {

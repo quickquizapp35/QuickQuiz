@@ -25,13 +25,13 @@ fun LogoutButton(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+          //  containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         modifier = Modifier.fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
-                .clickable { onClick() }
                 .padding(Dimens.CardPadding),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center

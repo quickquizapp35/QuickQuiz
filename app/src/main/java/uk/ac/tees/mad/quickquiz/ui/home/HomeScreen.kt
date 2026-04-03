@@ -47,7 +47,6 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
 
-
             HomeTopBar(
                onSettingClick = onSettingClick,
                 modifier = Modifier.statusBarsPadding()
