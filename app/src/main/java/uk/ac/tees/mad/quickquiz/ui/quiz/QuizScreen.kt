@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import uk.ac.tees.mad.quickquiz.ui.quiz.component.BottomActionSection
 import uk.ac.tees.mad.quickquiz.ui.quiz.component.OptionsSection
 import uk.ac.tees.mad.quickquiz.ui.quiz.component.ProgressSection
@@ -30,21 +29,25 @@ fun QuizScreen(
     difficulty: String,
     onNavigateToResult:()-> Unit,
     onNavigateToHome:()-> Unit,
-    viewModel: QuizViewModel = viewModel(),
+    viewModel: QuizViewModel,
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.fetchQuestion(
-            id = id, difficulty = difficulty
-        )
-    }
 
     val uiState by viewModel.quizUiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(uiState.isFinished) {
-        if (uiState.isFinished){
-            onNavigateToResult()
+    LaunchedEffect(id , difficulty) {
+        if (uiState.questions.isEmpty()) {
+            viewModel.fetchQuestion(id, difficulty)
         }
     }
+
+
+    LaunchedEffect(uiState.isFinished) {
+        if (uiState.isFinished) {
+            onNavigateToResult()
+            viewModel.consumeFinishEvent()
+        }
+    }
+
 
     Box(
         modifier = Modifier
@@ -52,44 +55,49 @@ fun QuizScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = Dimens.ScreenPadding)
-        ) {
+        Column(modifier = Modifier.fillMaxSize()){
 
             QuizTopBar(
                 onExit = onNavigateToHome,
-                modifier = Modifier.statusBarsPadding()
+                modifier = Modifier
+                    .statusBarsPadding()
             )
 
-            Spacer(Modifier.height(Dimens.SpaceL))
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = Dimens.ScreenPadding),
+                horizontalAlignment = Alignment.Start
+            ) {
 
-            ProgressSection(
-                current = uiState.currentIndex + 1,
-                total = uiState.totaQuestion,
-                progress = uiState.progress
-            )
+                Spacer(Modifier.height(Dimens.SpaceM))
 
-            Spacer(Modifier.height(Dimens.SpaceXL))
+                ProgressSection(
+                    current = uiState.currentIndex + 1,
+                    total = uiState.totaQuestion,
+                    progress = uiState.progress
+                )
 
-            QuestionSection(
-                question = uiState.currentQuestion?.question ?: ""
-            )
+                Spacer(Modifier.height(Dimens.SpaceM))
 
-            Spacer(Modifier.height(Dimens.SpaceL))
+                QuestionSection(
+                    question = uiState.currentQuestion?.question ?: ""
+                )
 
-            OptionsSection(
-                options = uiState.currentQuestion?.options ?: emptyList(),
-                selectedOptionId = uiState.selectedOptionId,
-                onOptionSelect = viewModel::onOptionSelected
-            )
+                Spacer(Modifier.height(Dimens.SpaceL))
 
-            Spacer(
-                modifier = Modifier.height(Dimens.BottomBarHeight)
-            )
+                Box {
+                    OptionsSection(
+                        options = uiState.currentQuestion?.options ?: emptyList(),
+                        selectedOptionId = uiState.selectedOptionId,
+                        onOptionSelect = viewModel::onOptionSelected
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.height(Dimens.BottomBarHeight)
+                )
+            }
         }
-
         BottomActionSection(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

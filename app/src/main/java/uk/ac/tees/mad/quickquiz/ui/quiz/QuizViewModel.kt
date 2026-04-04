@@ -22,6 +22,14 @@ class QuizViewModel(application: Application)
     val quizUiState = _quizUiState.asStateFlow()
     fun fetchQuestion(id :Int, difficulty: String){
 
+        _quizUiState.update {
+            it.copy(
+                categoryId = id,
+                difficulty = difficulty,
+                categoryName = CategoryTextMapper.getCategoryName(id)
+            )
+        }
+
         viewModelScope.launch {
             _quizUiState.update {
                 it.copy(isLoading = true)
@@ -80,6 +88,79 @@ class QuizViewModel(application: Application)
                 isFinished = isLast
             )
         }
+    }
+
+    fun retrySameQuiz() {
+        _quizUiState.update {
+            it.copy(
+                currentIndex = 0,
+                score = 0,
+                selectedOptionId = null,
+                isFinished = false
+            )
+        }
+    }
+
+    fun retryNewQuiz() {
+        val state = _quizUiState.value
+
+        _quizUiState.update {
+            it.copy(
+                currentIndex = 0,
+                score = 0,
+                selectedOptionId = null,
+                isFinished = false,
+                questions = emptyList()
+            )
+        }
+
+        fetchQuestion(
+            id = state.categoryId,
+            difficulty = state.difficulty
+        )
+    }
+
+
+    fun consumeFinishEvent() {
+       _quizUiState.update {
+            it.copy(isFinished = false)
+        }
+    }
+
+}
+
+
+object CategoryTextMapper {
+
+    private val categoryMap = mapOf(
+        9 to "General Knowledge",
+        10 to "Entertainment: Books",
+        11 to "Entertainment: Film",
+        12 to "Entertainment: Music",
+        13 to "Entertainment: Musicals & Theatres",
+        14 to "Entertainment: Television",
+        15 to "Entertainment: Video Games",
+        16 to "Entertainment: Board Games",
+        17 to "Science & Nature",
+        18 to "Science: Computers",
+        19 to "Science: Mathematics",
+        20 to "Mythology",
+        21 to "Sports",
+        22 to "Geography",
+        23 to "History",
+        24 to "Politics",
+        25 to "Art",
+        26 to "Celebrities",
+        27 to "Animals",
+        28 to "Vehicles",
+        29 to "Entertainment: Comics",
+        30 to "Science: Gadgets",
+        31 to "Entertainment: Japanese Anime & Manga",
+        32 to "Entertainment: Cartoon & Animations"
+    )
+
+    fun getCategoryName(id: Int): String {
+        return categoryMap[id] ?: "General Knowledge"
     }
 }
 

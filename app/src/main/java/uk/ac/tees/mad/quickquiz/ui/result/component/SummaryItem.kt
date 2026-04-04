@@ -57,7 +57,7 @@ fun SummaryItem(
                 )
             }
 
-            Spacer(modifier = Modifier.width(Dimens.SpaceM))
+            Spacer(modifier = Modifier.width(Dimens.SpaceS))
 
             Text(
                 text = label,

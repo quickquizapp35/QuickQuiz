@@ -2,7 +2,10 @@ package uk.ac.tees.mad.quickquiz.ui.quiz.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import uk.ac.tees.mad.quickquiz.ui.quiz.component.model.QuizOption
 import uk.ac.tees.mad.quickquiz.ui.theme.Dimens
 
@@ -12,7 +15,9 @@ fun OptionsSection(
     selectedOptionId: String?,
     onOptionSelect: (String) -> Unit
 ) {
-    Column(verticalArrangement = Arrangement
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement
         .spacedBy(Dimens.SpaceM)) {
         options.forEach { option ->
             OptionCard(

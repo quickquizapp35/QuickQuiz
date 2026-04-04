@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,10 +27,12 @@ fun ScoreRing(
         Box(contentAlignment = Alignment.Center) {
 
             CircularProgressIndicator(
-                progress = progress,
-                strokeWidth = 12.dp,
-                modifier = Modifier.size(180.dp),
-                color = MaterialTheme.colorScheme.primary
+            progress = { progress },
+            modifier = Modifier.size(160.dp),
+            color = MaterialTheme.colorScheme.primary,
+            strokeWidth = 8.dp,
+            trackColor = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
+            strokeCap = ProgressIndicatorDefaults.CircularDeterminateStrokeCap,
             )
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
