@@ -38,29 +38,6 @@ fun AppNavHost(
             )
         }
 
-//        composable(
-//            NavRoutes.Quiz.route,
-//            arguments = listOf(
-//                navArgument("categoryId") { type = NavType.IntType },
-//                navArgument("difficulty") { type = NavType.StringType }
-//            )
-//
-//        ) { backStackEntry ->
-//            val id = backStackEntry.arguments?.getInt("categoryId") ?: 9
-//            val difficulty = backStackEntry.arguments?.getString("difficulty") ?: "medium"
-//
-//            QuizScreen(
-//                id = id,
-//                difficulty = difficulty,
-//                onNavigateToHome = {
-//                    navController.popBackStack()
-//                },
-//                onNavigateToResult = {
-//                    navController.navigate(NavRoutes.Result.route)
-//                }
-//            )
-//        }
-
         composable(NavRoutes.Auth.route) {
             AuthScreen(onNavigateToHome = {
                 navController.navigate(NavRoutes.Home.route) {
@@ -75,22 +52,16 @@ fun AppNavHost(
             SettingsScreen(
                 onNavBack = {
                     navController.popBackStack()
+                },
+                onLogoutClick = {
+                    navController.navigate(NavRoutes.Auth.route){
+                        popUpTo(NavRoutes.Setting.route){
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
-
-//        composable(NavRoutes.Result.route) {
-//            ResultScreen(
-//                uiState = ResultUiState(
-//                    categoryName = "Mathematics",
-//                    totalQuestions = 10,
-//                    correctAnswers = 7
-//                ),
-//                onRetry = {},
-//                onBackToHome = {},
-//                onBack = {}
-//            )
-//        }
 
         navigation(
             route = NavRoutes.QuizGraph.route,
