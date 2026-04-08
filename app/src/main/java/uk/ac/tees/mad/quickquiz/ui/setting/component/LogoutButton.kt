@@ -21,12 +21,9 @@ import uk.ac.tees.mad.quickquiz.ui.theme.Dimens
 
 @Composable
 fun LogoutButton(
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     Card(
-        colors = CardDefaults.cardColors(
-          //  containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
         modifier = Modifier.fillMaxWidth()
             .clickable { onClick() }
     ) {

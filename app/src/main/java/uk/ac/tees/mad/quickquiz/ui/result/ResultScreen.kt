@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.quickquiz.ui.result
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,33 +81,23 @@ fun ResultScreen(
 
                 SummarySection(uiState = uiState)
 
-//                Spacer(Modifier.weight(1f))
-//                Spacer(Modifier.height(Dimens.SpaceS))
             }
             ResultActions(
                 modifier = Modifier
                     .padding(horizontal = Dimens.ScreenPadding)
                     .navigationBarsPadding(),
-                onRetryNew = onRetryNew,
+                onRetryNew = {
+                    viewModel
+                        .saveQuizAnswer()
+                    onRetryNew()
+                },
                 onRetrySame = onRetrySame,
-                onBackToHome = onBackToHome,
+                onBackToHome = {
+                    viewModel
+                        .saveQuizAnswer()
+                    onBackToHome()
+                }
             )
         }
     }
 }
-
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun ResultScreenPreview(){
-//    ResultScreen(
-//        uiState = ResultUiState(
-//            categoryName = "Mathematics",
-//            totalQuestions = 10,
-//            correctAnswers = 7
-//        ),
-//        onRetry = {},
-//        onBackToHome = {},
-//        onBack = {}
-//    )
-//}

@@ -15,15 +15,11 @@ import androidx.compose.ui.Modifier
 import uk.ac.tees.mad.quickquiz.ui.theme.Dimens
 
 @Composable
-fun PreferenceSection() {
+fun PreferenceSection(isHapticEnabled: Boolean = true,
+                      isSoundEnabled: Boolean = true,
+                      onHapticEnabledChange: (Boolean) -> Unit,
+                      onSoundEnabledChange: (Boolean) -> Unit ) {
     Column {
-
-        Text(
-            text = "PREFERENCES",
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
         Spacer(Modifier.height(Dimens.SpaceM))
 
         Card {
@@ -32,7 +28,8 @@ fun PreferenceSection() {
                 PreferenceToggleItem(
                     icon = Icons.Outlined.VolumeUp,
                     title = "Sound Effects",
-                    checked = true
+                    checked = isSoundEnabled,
+                    onCheckedChange = onSoundEnabledChange
                 )
 
                 Divider()
@@ -40,7 +37,8 @@ fun PreferenceSection() {
                 PreferenceToggleItem(
                     icon = Icons.Outlined.Vibration,
                     title = "Haptic Feedback",
-                    checked = true
+                    checked = isHapticEnabled,
+                    onCheckedChange = onHapticEnabledChange
                 )
             }
         }

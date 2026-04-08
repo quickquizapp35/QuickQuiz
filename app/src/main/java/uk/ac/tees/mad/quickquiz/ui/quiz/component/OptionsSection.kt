@@ -13,7 +13,9 @@ import uk.ac.tees.mad.quickquiz.ui.theme.Dimens
 fun OptionsSection(
     options: List<QuizOption>,
     selectedOptionId: String?,
-    onOptionSelect: (String) -> Unit
+    onOptionSelect: (String) -> Unit,
+    showResult: Boolean,
+    isHapticEnabled: Boolean
 ) {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -22,8 +24,10 @@ fun OptionsSection(
         options.forEach { option ->
             OptionCard(
                 option = option,
+                showResult = showResult,
                 selected = option.id == selectedOptionId,
-                onClick = { onOptionSelect(option.id) }
+                onClick = { onOptionSelect(option.id) },
+                isHapticEnabled = isHapticEnabled
             )
         }
     }

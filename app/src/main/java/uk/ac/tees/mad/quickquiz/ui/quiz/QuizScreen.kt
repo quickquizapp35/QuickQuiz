@@ -1,5 +1,7 @@
 package uk.ac.tees.mad.quickquiz.ui.quiz
 
+import android.content.Context
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,13 +11,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import uk.ac.tees.mad.quickquiz.R
 import uk.ac.tees.mad.quickquiz.ui.quiz.component.BottomActionSection
 import uk.ac.tees.mad.quickquiz.ui.quiz.component.OptionsSection
 import uk.ac.tees.mad.quickquiz.ui.quiz.component.ProgressSection
@@ -34,6 +39,23 @@ fun QuizScreen(
 
     val uiState by viewModel.quizUiState.collectAsStateWithLifecycle()
 
+
+    val context = LocalContext.current
+
+    if(uiState.isSoundEnabled){
+        LaunchedEffect(Unit) {
+            viewModel.events.collect { event ->
+                when (event) {
+                    QuizUiEvent.PlayCorrectSound -> {
+                        playSound(context, R.raw.success)
+                    }
+                    QuizUiEvent.PlayWrongSound -> {
+                        playSound(context, R.raw.failure)
+                    }
+                }
+            }
+        }
+    }
     LaunchedEffect(id , difficulty) {
         if (uiState.questions.isEmpty()) {
             viewModel.fetchQuestion(id, difficulty)
@@ -70,6 +92,14 @@ fun QuizScreen(
                 horizontalAlignment = Alignment.Start
             ) {
 
+                if(uiState.isLoading){
+                    Box(modifier = Modifier
+                        .fillMaxSize(),
+                        contentAlignment = Alignment.Center){
+                        CircularProgressIndicator()
+                    }
+                }
+
                 Spacer(Modifier.height(Dimens.SpaceM))
 
                 ProgressSection(
@@ -90,7 +120,9 @@ fun QuizScreen(
                     OptionsSection(
                         options = uiState.currentQuestion?.options ?: emptyList(),
                         selectedOptionId = uiState.selectedOptionId,
-                        onOptionSelect = viewModel::onOptionSelected
+                        showResult = uiState.showAnswerResult,
+                        onOptionSelect = viewModel::onOptionSelected,
+                        isHapticEnabled = uiState.isHapticEnabled
                     )
                 }
                 Spacer(
@@ -110,3 +142,12 @@ fun QuizScreen(
         )
     }
 }
+
+fun playSound(context: Context, resId: Int) {
+    val mediaPlayer = MediaPlayer.create(context, resId)
+    mediaPlayer.setOnCompletionListener {
+        it.release()
+    }
+    mediaPlayer.start()
+}
+

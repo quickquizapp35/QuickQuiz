@@ -17,7 +17,10 @@ data class QuizUiState(
 
     val difficulty: String = QuizDifficulty.MEDIUM.apiPath,
     val categoryId: Int = 9,
-    val categoryName: String = "General Knowledge"
+    val categoryName: String = "General Knowledge",
+    val showAnswerResult: Boolean = false,
+    val isHapticEnabled : Boolean = false,
+    val isSoundEnabled : Boolean = false
 ) {
 
     val currentQuestion: QuizQuestionUi?

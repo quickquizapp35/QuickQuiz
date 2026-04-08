@@ -43,5 +43,4 @@ class QuizRepositoryImpl(private val triviaApiService: QuizApiService)
             Result.failure(e)
         }
     }
-
 }

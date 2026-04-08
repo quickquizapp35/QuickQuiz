@@ -20,7 +20,7 @@ fun PreferenceToggleItem(
     icon: ImageVector,
     title: String,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit = {}
+    onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier

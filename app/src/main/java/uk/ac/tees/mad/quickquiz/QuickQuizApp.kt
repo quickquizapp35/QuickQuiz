@@ -10,12 +10,23 @@ import uk.ac.tees.mad.quickquiz.domain.repository.AuthRepository
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import uk.ac.tees.mad.quickquiz.data.repository.FirebaseRepositoryImpl
 import uk.ac.tees.mad.quickquiz.data.repository.QuizRepositoryImpl
 import uk.ac.tees.mad.quickquiz.domain.repository.QuizRepository
+import uk.ac.tees.mad.quickquiz.preference.AppPreference
 import uk.ac.tees.mad.quickquiz.utils.Constants
 
 class QuickQuizApp : Application() {
 
+    val firebaseRepository : FirebaseRepositoryImpl by lazy {
+        FirebaseRepositoryImpl(
+            firebaseAuth = firebaseAuth,
+            firebaseFirestore = firestore
+        )
+    }
+    val appPreference: AppPreference by lazy {
+        AppPreference(this)
+    }
     val firebaseAuth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
     }

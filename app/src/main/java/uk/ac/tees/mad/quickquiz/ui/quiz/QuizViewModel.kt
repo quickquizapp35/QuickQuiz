@@ -3,7 +3,10 @@ package uk.ac.tees.mad.quickquiz.ui.quiz
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,9 +20,27 @@ class QuizViewModel(application: Application)
         private val quizRepository : QuizRepository =
         (application as QuickQuizApp).quizRepository
 
+       private val appPreference = (application as QuickQuizApp).appPreference
+
+      private val firebaseRepository = (application as QuickQuizApp).firebaseRepository
+
+
+
 
     private val _quizUiState = MutableStateFlow(QuizUiState())
     val quizUiState = _quizUiState.asStateFlow()
+
+
+    private val _events = MutableSharedFlow<QuizUiEvent>()
+    val events = _events.asSharedFlow()
+
+
+
+   init {
+    resolveHapticSound()
+     }
+
+
     fun fetchQuestion(id :Int, difficulty: String){
 
         _quizUiState.update {
@@ -64,9 +85,8 @@ class QuizViewModel(application: Application)
             it.copy(selectedOptionId = optionId)
         }
     }
-
-
     fun onConfirmAnswer() {
+
         val state = _quizUiState.value
         val question = state.currentQuestion ?: return
 
@@ -74,22 +94,39 @@ class QuizViewModel(application: Application)
             .firstOrNull { it.id == state.selectedOptionId }
             ?: return
 
-        val newScore =
-            if (selected.isCorrect) state.score + 1
-            else state.score
+        viewModelScope.launch {
 
-        val isLast = state.currentIndex == state.questions.lastIndex
+            val isCorrect = selected.isCorrect
 
-        _quizUiState.update {
-            it.copy(
-                score = newScore,
-                currentIndex = if (isLast) it.currentIndex else it.currentIndex + 1,
-                selectedOptionId = null,
-                isFinished = isLast
+            _quizUiState.update {
+                it.copy(showAnswerResult = true)
+            }
+
+            _events.emit(
+                if (isCorrect)
+                    QuizUiEvent.PlayCorrectSound
+                else
+                    QuizUiEvent.PlayWrongSound
             )
+             delay(700)
+            val newScore =
+                if (isCorrect) state.score + 1
+                else state.score
+
+            val isLast =
+                state.currentIndex == state.questions.lastIndex
+
+            _quizUiState.update {
+                it.copy(
+                    score = newScore,
+                    currentIndex = if (isLast) it.currentIndex else it.currentIndex + 1,
+                    selectedOptionId = null,
+                    showAnswerResult = false,
+                    isFinished = isLast
+                )
+            }
         }
     }
-
     fun retrySameQuiz() {
         _quizUiState.update {
             it.copy(
@@ -100,7 +137,6 @@ class QuizViewModel(application: Application)
             )
         }
     }
-
     fun retryNewQuiz() {
         val state = _quizUiState.value
 
@@ -119,14 +155,35 @@ class QuizViewModel(application: Application)
             difficulty = state.difficulty
         )
     }
-
-
     fun consumeFinishEvent() {
        _quizUiState.update {
             it.copy(isFinished = false)
         }
     }
+    fun resolveHapticSound(){
+        _quizUiState.update {
+            it.copy(
+                isSoundEnabled = appPreference.isSoundEnabled,
+                isHapticEnabled = appPreference.isHapticEnabled
+            )
+        }
+    }
 
+    fun saveQuizAnswer(){
+        viewModelScope.launch {
+            firebaseRepository.saveScore(
+                categoryId = _quizUiState.value.categoryId,
+                categoryName = _quizUiState.value.categoryName,
+                difficulty = _quizUiState.value.difficulty,
+                score = _quizUiState.value.score,
+                totalQuestions = _quizUiState.value.questions.size
+            ).onSuccess {
+
+            }.onFailure {
+
+            }
+        }
+    }
 }
 
 
@@ -163,4 +220,12 @@ object CategoryTextMapper {
         return categoryMap[id] ?: "General Knowledge"
     }
 }
+
+
+
+sealed class QuizUiEvent {
+    object PlayCorrectSound : QuizUiEvent()
+    object PlayWrongSound : QuizUiEvent()
+}
+
 
