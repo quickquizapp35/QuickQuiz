@@ -75,7 +75,7 @@ fun ResultScreen(
 
                 Spacer(Modifier.height(Dimens.SpaceS))
 
-                PraiseChip(scoreRatio = uiState.progress)
+                PraiseChip(scoreRatio = uiState.percentageCorrect)
 
                 Spacer(Modifier.height(Dimens.SpaceS))
 

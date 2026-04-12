@@ -28,10 +28,5 @@ fun ResultHeader(
 
         Spacer(modifier = Modifier.height(Dimens.SpaceS))
 
-        Text(
-            text = "Excellent performance today.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
     }
 }

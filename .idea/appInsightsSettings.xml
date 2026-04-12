@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="uk.ac.tees.mad.quickquiz" />
+                  <option name="mobileSdkAppId" value="1:821407446762:android:0c539e31c9a234222e0993" />
+                  <option name="projectId" value="quickquiz-64a00" />
+                  <option name="projectNumber" value="821407446762" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -26,14 +26,12 @@ class QuizViewModel(application: Application)
 
 
 
-
     private val _quizUiState = MutableStateFlow(QuizUiState())
     val quizUiState = _quizUiState.asStateFlow()
 
 
     private val _events = MutableSharedFlow<QuizUiEvent>()
     val events = _events.asSharedFlow()
-
 
 
    init {

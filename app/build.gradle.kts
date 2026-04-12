@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
-    id("kotlin-kapt")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 }
 
@@ -72,10 +71,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
 
-    //room dependency
-    implementation ("androidx.room:room-runtime:2.8.4")
-    kapt ("androidx.room:room-compiler:2.8.4")
-    implementation("androidx.room:room-ktx:2.8.4")
 
     //splash screen dependency
     implementation("androidx.core:core-splashscreen:1.0.1")
